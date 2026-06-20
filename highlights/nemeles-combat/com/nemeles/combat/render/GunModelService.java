@@ -1,4 +1,4 @@
-package com.nemeles.combat.render;
+﻿package com.nemeles.combat.render;
 
 import com.nemeles.combat.CombatConfig;
 import com.nemeles.combat.GunDef;
@@ -55,7 +55,7 @@ public final class GunModelService {
     private final boolean available;
     private final BmApi bm;   // wrapper de reflexion; null si no disponible
 
-    // Floodgate (soft-dep por reflexion): detectar jugadores Bedrock para OCULTARLES el disfraz (usan su attachable AG2).
+    // Floodgate (soft-dep por reflexion): detectar jugadores Bedrock para OCULTARLES el disfraz (usan su attachable nativo de Bedrock).
     private Object fgApi;
     private java.lang.reflect.Method fgIsFloodgate;
 
@@ -97,7 +97,7 @@ public final class GunModelService {
         }
     }
 
-    /** true si el jugador es Bedrock (cliente Geyser/Floodgate). A esos se les OCULTA el disfraz (ven su attachable AG2). */
+    /** true si el jugador es Bedrock (cliente Geyser/Floodgate). A esos se les OCULTA el disfraz (ven su attachable nativo de Bedrock). */
     private boolean isBedrock(java.util.UUID uuid) {
         if (fgApi == null || fgIsFloodgate == null) return false;
         try { return Boolean.TRUE.equals(fgIsFloodgate.invoke(fgApi, uuid)); }
@@ -107,7 +107,7 @@ public final class GunModelService {
     /**
      * RETROCESO EN 1a PERSONA (Java): intercambia el custom_model_data del arma en mano por una secuencia de
      * frames (variantes del modelo con la transform de 1a persona movida) y restaura al CMD base. NO depende de
-     * BetterModel (es manipulacion del item vanilla). Bedrock anima por su attachable AG2 (no se toca aqui).
+     * BetterModel (es manipulacion del item vanilla). Bedrock anima por su attachable nativo de Bedrock (no se toca aqui).
      */
     public void playRecoilFp(Player player, GunDef gun) {
         if (player == null || gun == null) return;
@@ -201,7 +201,7 @@ public final class GunModelService {
         String current = mounted.get(id);
         if (modelId.equals(current)) return;   // ya montado: nada que hacer
         if (current != null) safe(() -> bm.remove(player, current));   // cambio de arma: cerrar el anterior
-        // hideFilter = isBedrock: el disfraz NO se manda a viewers Bedrock (ellos ven su attachable AG2 -> cero doble).
+        // hideFilter = isBedrock: el disfraz NO se manda a viewers Bedrock (ellos ven su attachable nativo de Bedrock -> cero doble).
         boolean ok = safe(() -> bm.equip(player, modelId, this::isBedrock));
         if (ok) {
             mounted.put(id, modelId);
@@ -394,7 +394,7 @@ public final class GunModelService {
         }
 
         /** Equipa el modelo sobre el jugador conservando su skin (ModelProfile.of(player)).
-         *  hideViewerUuid: los viewers cuyo UUID cumpla el predicado NO veran el disfraz (Bedrock -> usan su attachable AG2).
+         *  hideViewerUuid: los viewers cuyo UUID cumpla el predicado NO veran el disfraz (Bedrock -> usan su attachable nativo de Bedrock).
          *  Como GME consulta pipeline.isHide para decidir si genera la proxy Bedrock, esto evita el doble en Bedrock. */
         boolean equip(Player player, String modelId, java.util.function.Predicate<java.util.UUID> hideViewerUuid) throws Exception {
             Object renderer = mModelOrNull.invoke(null, modelId);
