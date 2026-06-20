@@ -1,0 +1,38 @@
+name: NemelesCore
+version: ${project.version}
+main: com.nemeles.core.NemelesCorePlugin
+api-version: '1.21'
+authors:
+  - Nemeles
+description: Nucleo de NemelesRP (datos, economia dual, regiones, eventos).
+
+softdepend:
+  - Vault
+  - WorldGuard
+  - WorldEdit
+
+commands:
+  nemeles:
+    description: Comandos de administracion del nucleo NemelesRP.
+    usage: /<command> <db|info>
+    permission: nemeles.core.admin
+  cajero:
+    description: Convierte tu dinero limpio marcado en banco sin rastro (con comision).
+    usage: /<command> [comision]
+  pagar:
+    description: Entrega efectivo en mano a otro jugador cercano (pago de calle).
+    usage: /<command> <jugador> <cantidad>  ·  /<command> confirmar
+    aliases: [pay, dar]
+  mercadonegro:
+    description: Publica un trapicheo en el mercado negro (canal de Discord) para cerrar tratos ilegales.
+    usage: /<command> <categoria> <precio> <descripcion>  ·  /<command> lista
+    aliases: [mn, trapicheo, bajosfondos]
+  ayuda:
+    description: Menu de ayuda navegable por categorias + buscador (onboarding crossplay Java/Bedrock).
+    usage: /<command> [categoria]  ·  /<command> buscar <palabra>
+    aliases: [help, comandos, menu, guia]
+
+permissions:
+  nemeles.core.admin:
+    description: Acceso a los comandos de administracion del core.
+    default: op

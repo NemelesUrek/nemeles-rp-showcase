@@ -1,0 +1,42 @@
+name: NemelesJobs
+version: ${project.version}
+main: com.nemeles.jobs.JobsPlugin
+api-version: '1.21'
+authors:
+  - Nemeles
+description: Sistema de trabajos (jobs) con niveles de NemelesRP.
+
+depend:
+  - NemelesCore
+
+commands:
+  jobs:
+    description: Sistema de habilidades (ver progreso, ranking).
+    usage: /<command> <list|stats|top>
+    aliases: [skills, habilidades, habilidad]
+    permission: nemeles.jobs.use
+  weed:
+    description: "Marihuana (cultivo ilegal): comprar, procesar, vender, rastrear."
+    usage: /<command> <semilla|procesar|vender|rastrear>
+    permission: nemeles.jobs.use
+  empleo:
+    description: "Empleo (un trabajo por jugador): elegir, dejar, ver."
+    usage: /<command> <list|join|leave|info>
+    aliases: [job, trabajo]
+    permission: nemeles.jobs.use
+  perk:
+    description: Perks de habilidades (1 de 2 cada 10 niveles).
+    usage: /<command> <elegir|info>
+    aliases: [perks, mejora]
+    permission: nemeles.jobs.use
+
+permissions:
+  nemeles.jobs.use:
+    description: Usar el sistema de habilidades y la marihuana.
+    default: true
+  nemeles.jobs.admin:
+    description: Administracion de habilidades.
+    default: op
+  nemeles.jobs.police:
+    description: Rastrear plantaciones de marihuana.
+    default: op

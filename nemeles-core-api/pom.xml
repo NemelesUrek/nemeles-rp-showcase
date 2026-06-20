@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.nemeles</groupId>
+        <artifactId>nemeles-rp</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>nemeles-core-api</artifactId>
+    <packaging>jar</packaging>
+    <name>NemelesCore-API</name>
+    <description>Contratos publicos (interfaces, eventos, DTOs) del nucleo NemelesRP</description>
+
+    <dependencies>
+        <!-- Solo paper-api: la API no implementa nada, solo define contratos. -->
+        <dependency>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+        </dependency>
+    </dependencies>
+</project>

@@ -1,0 +1,100 @@
+# ─────────────────────────────────────────────────────────────
+#  NemelesCore – configuracion del nucleo
+# ─────────────────────────────────────────────────────────────
+database:
+  # Motor: 'sqlite' (por defecto, ideal para pruebas locales) o 'mysql'/'mariadb' (futuro milestone).
+  type: sqlite
+
+  sqlite:
+    # Archivo dentro de plugins/NemelesCore/
+    file: data.db
+
+  mysql:
+    host: localhost
+    port: 3306
+    database: nemeles
+    user: root
+    password: ""
+
+  pool:
+    # Tamano del pool (IGNORADO en SQLite: se fuerza a 1 por ser single-writer).
+    maximum-pool-size: 10
+
+# ─────────────────────────────────────────────────────────────
+#  Economia
+# ─────────────────────────────────────────────────────────────
+economy:
+  launder:
+    # Comision por defecto del lavado (0.30 = 30%). Se aplica automaticamente
+    # cuando no se especifica una comision en el comando.
+    default-fee: 0.30
+  cashier:
+    # Comision por defecto del CAJERO (/cajero): limpia el rastro del dinero marcado.
+    # 0.10 = 10%. Antes esta clave no existia y el comando usaba siempre 0.10 fijo.
+    default-fee: 0.10
+
+  # ─── Pago "de calle" (/pagar <jugador> <cantidad>): entrega EFECTIVO en mano ───
+  # Pensado para el rol cara a cara (pagar al sicario, al dealer, dividir botin, propina).
+  # La transferencia es atomica y anti-dupe; solo mueve EFECTIVO (banco/sucio van por otras vias).
+  pay:
+    # Radio maximo (en bloques) para entregar el dinero en mano. 0 = sin limite de distancia.
+    radius: 8.0
+    # Cooldown entre pagos del MISMO pagador, en segundos (anti-spam). 0 = sin cooldown.
+    cooldown-seconds: 3
+    # Tope por pago, en $. 0 = sin tope.
+    max-per-pay: 0
+    # A partir de este monto ($) se pide confirmar con /pagar confirmar (evita dedazos).
+    # 0 = nunca pedir confirmacion.
+    confirm-threshold: 50000
+
+  # ─── Interes de los AHORROS (saldo BANCO, el que muestra la billetera del telefono) ───
+  # El banco genera un % cada 'interval-hours'. Pensado con TOPES para que NO haya cifras
+  # exorbitantes ni hiperinflacion. Solo paga a jugadores CONECTADOS y UNA vez por intervalo
+  # (estar desconectado NO acumula pagos: al volver cobras un periodo, no varios).
+  interest:
+    enabled: true
+    rate: 0.05              # 5% cada intervalo (sobre el principal que cuenta, ver principal-cap)
+    interval-hours: 24      # cada cuanto se paga (24 = una vez al dia)
+    # ANTI-ABUSO 1 (el importante): solo los primeros 'principal-cap' del banco generan interes.
+    # Asi el rendimiento es LINEAL, no exponencial: alguien con millones cobra lo mismo que alguien
+    # con 'principal-cap'. Es el freno principal contra cifras exorbitantes. En $ (no centimos).
+    principal-cap: 10000    # 5% de 10000 = 500/dia como maximo por este tope
+    # ANTI-ABUSO 2: techo duro absoluto del interes por pago (por si subes la tasa o el cap). En $.
+    # OJO: 0 = SIN techo (el interes solo lo limita principal-cap); NO significa "no pagar".
+    max-payout: 1000
+    # Por debajo de este saldo, el banco no genera interes (evita pagos de centavos). En $.
+    min-balance: 100
+    # Cada cuanto el servidor revisa a los conectados para pagar al que le toque.
+    check-interval-minutes: 10
+    # Avisar al jugador en el chat cuando cobra interes.
+    notify: true
+
+# ─────────────────────────────────────────────────────────────
+#  Mercado negro  (/mercadonegro <anuncio>  ·  alias /mn /trapicheo /bajosfondos)
+# ─────────────────────────────────────────────────────────────
+# Un jugador publica un trapicheo (venta ilegal, encuentro, recado turbio) que sale en el canal
+# #mercado-negro de Discord. NO se difunde in-game: es un tablon de Discord para cerrar tratos.
+# El texto se sanea (sin codigos de color, sin pings @everyone/@here) y se recorta.
+blackmarket:
+  enabled: true
+  # Cooldown POR DEFECTO (segundos) si una categoria no define el suyo. 0 = sin cooldown.
+  cooldown-seconds: 90
+  # Cooldown GLOBAL por jugador (segundos), ADEMAS del de cada categoria: frena al troll que rota
+  # categorias para publicar sin parar e inundar el canal. 0 = sin tope global.
+  global-cooldown-seconds: 30
+  # Maximo de caracteres del anuncio (se recorta con … por palabra si se pasa).
+  max-length: 200
+  # Prefijo del alias ANONIMO del vendedor (el vendedor JAMAS es el nombre de cuenta). NOTA: si
+  # nemeles-identity esta cargado (lo normal) se usa SU alias in-game ("Desconocido #XXXX") y este
+  # valor NO se usa; es solo el RESPALDO por si identity no cargara. Para que el alias sea coherente,
+  # debe COINCIDIR con 'unknown-name' de nemeles-identity (por defecto, ambos "Desconocido").
+  alias-prefix: "Desconocido"
+  # Categorias del anuncio: id -> etiqueta (jerga), emoji y color hex del embed de Discord + cooldown (s).
+  # OJO: los IDs deben coincidir EXACTAMENTE con las Conditions de las 6 alertas de DiscordSRV/alerts.yml.
+  categorias:
+    hierro:   { label: "Fierros y munición",        emoji: "🔫",  color: "#6E0B14", cooldown: 180 }
+    polvo:    { label: "Material y sustancias",      emoji: "💊",  color: "#4B0082", cooldown: 180 }
+    ruedas:   { label: "Ruedas y motores",          emoji: "🏎️", color: "#1F618D", cooldown: 120 }
+    favores:  { label: "Trabajos y favores",         emoji: "🤝",  color: "#145A32", cooldown: 60 }
+    papeles:  { label: "Identidades y sellos",       emoji: "📄",  color: "#7D6608", cooldown: 120 }
+    encargos: { label: "Lo que no entra en lista",   emoji: "📦",  color: "#2C3E50", cooldown: 90 }

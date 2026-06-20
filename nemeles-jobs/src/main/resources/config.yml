@@ -1,0 +1,83 @@
+# ─────────────────────────────────────────────────────────────
+#  NemelesJobs – configuracion
+# ─────────────────────────────────────────────────────────────
+levels:
+  # Curva de XP: xp_para_subir(nivel) = base*nivel + quad*nivel^2
+  base: 100
+  quad: 4
+  cap: 100
+
+pay:
+  # Multiplicador de pago por nivel (+3% por nivel sobre el pago base de la accion).
+  scale-per-level: 0.03
+
+# Decadencia por inactividad: si no practicas una habilidad, baja con los dias.
+decay:
+  enabled: true
+  grace-days: 3           # dias sin tocar la habilidad antes de empezar a decaer
+  rate-per-day: 0.015     # 1.5% del XP total por dia efectivo
+  cap-days: 30            # no castigar mas de 30 dias de golpe
+  floor-level: 10         # suelo global: nunca baja de aqui
+  illegal-mult: 1.5       # las habilidades ilegales se oxidan 50% mas rapido
+  max-drop-per-login: 5   # maximo de niveles perdidos por sesion
+  # Nota: ademas nunca baja del ultimo multiplo de 10 alcanzado (protege los perks).
+
+# Marihuana (rama ilegal de la Agricultura).
+weed:
+  unlock-level: 40        # nivel de Agricultura necesario para cultivar
+  grow-seconds: 180       # ~3 minutos para madurar (4 fases)
+  neglect-seconds: 600    # tras madurar, muere si no se cosecha en este tiempo
+  buds-min: 1
+  buds-max: 3
+  process-ratio: 3        # cogollos necesarios por bolsa
+  bag-price: 250.0        # venta por bolsa (dinero SUCIO)
+  seed-price: 50.0        # coste por semilla (efectivo)
+  detect-radius: 40       # radio de /weed rastrear (policia)
+  harvest-xp-per-bud: 12  # XP de Agricultura por cogollo cosechado
+  # require-zone: true = solo se planta en las regiones de 'zones'. Para PRUEBAS dejalo en false
+  # (si false y zones vacio, se puede plantar en cualquier sitio). Para produccion: true + 2 zonas.
+  require-zone: false
+  zones: []               # nombres de regiones WorldGuard donde se permite cultivar (ej: [pantano_sur, cerro_norte])
+  # TEXTURAS (pack opt-in resourcepack/NemelesRP): CMD para la textura de cada item (0 = item vanilla).
+  # Valores del pack: semilla 4201, cogollo 4202, bolsa 4203. Necesita el pack cargado (Java) + Geyser (Bedrock).
+  model-data:
+    seed: 0
+    bud: 0
+    bag: 0
+
+# Empleo (un trabajo por jugador; capa de identidad de rol sobre las habilidades).
+employment:
+  change-cooldown-hours: 24   # penalizacion: espera para cambiar/tomar otro trabajo tras un cambio o renuncia
+  no-job-xp-factor: 0.35      # XP que ganas SIN empleo (35%)
+  off-job-xp-factor: 0.5      # XP en una habilidad distinta a la de tu empleo (50%)
+
+# ─────────────────────────────────────────────────────────────
+# ZONAS DE TRABAJO: areas fisicas donde se ejerce cada oficio.
+#  - Dentro de la zona de TU oficio -> ganas XP extra (bonus de la zona).
+#  - Si un oficio TIENE zonas y lo practicas FUERA de ellas -> ganas menos (out-of-zone-penalty).
+#  - Un oficio SIN zonas definidas no recibe penalizacion (1.0 en cualquier sitio).
+# Idea de rol: pon un NPC "capataz" en la entrada de cada zona (con NemelesNpcAI/Citizens) que
+# diga a la gente donde se trabaja; ficharse al oficio sigue siendo /empleo join <oficio>.
+# Comando del jugador: /empleo zonas (lista las zonas y marca en cual estas).
+#
+# IMPORTANTE: por defecto NO hay zonas definidas (zones vacio) -> el sistema no penaliza nada.
+# Para activarlo, define abajo cuboides con coordenadas REALES de tu mapa (mira las coords con F3).
+work-zones:
+  enabled: true
+  out-of-zone-penalty: 0.7    # XP al practicar un oficio CON zonas fuera de ellas (70%)
+  zones: {}
+  # Ejemplo (descomenta y ajusta coordenadas a tu ciudad). 'min' y 'max' son dos esquinas del cuboide:
+  #   mina-del-levante:
+  #     job: miner
+  #     world: world
+  #     display: "Mina del Levante"
+  #     bonus: 1.5            # +50% XP de mineria dentro de la mina
+  #     min: [100, 0, 200]
+  #     max: [160, 80, 260]
+  #   huerto-de-los-cerros:
+  #     job: farmer
+  #     world: world
+  #     display: "Huerto de los Cerros"
+  #     bonus: 1.4
+  #     min: [-40, 60, 10]
+  #     max: [-10, 80, 50]

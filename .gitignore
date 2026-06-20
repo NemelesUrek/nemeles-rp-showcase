@@ -1,0 +1,34 @@
+# Build output
+target/
+**/target/
+*.class
+*.log
+dependency-reduced-pom.xml
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Secrets
+*.env
+.env
+*.pem
+*.key
+*.keystore
+*.p12
+*.token
+secrets.yml
+secrets.json
