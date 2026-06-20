@@ -15,7 +15,7 @@ achieves real parity across two game engines.
 > server (30 modules / 461 Java files / ~20.6k LOC). The `nemeles-core-api`, `nemeles-core`
 > and `nemeles-jobs` modules **build and pass tests** here (green CI above). The
 > [`highlights/`](highlights/) folder contains **representative source** from the most
-> interesting modules (combat/3D render, local-LLM NPCs, turf-war, the 3D pipeline) for
+> interesting modules (combat/render code, local-LLM NPCs, turf-war, crossplay tooling) for
 > reading — see [`highlights/HIGHLIGHTS.md`](highlights/HIGHLIGHTS.md). The full server stays private.
 
 ---
@@ -102,8 +102,9 @@ flowchart TD
   Project-Zomboid-style medical model (bleeding, fractures, infections, healing minigames).
 - **`npcai`** — NPCs driven by a local LLM (Ollama) with persistent memory, per-player affinity,
   world-context prompts, a CJK language-drift guard, and a real-time cloned-voice loop.
-- **3D pipeline** — a from-scratch software 3D rasterizer in pure Python/Pillow + crossplay
-  packaging tooling.
+- **Crossplay packaging tooling** (PowerShell/Python) — including a script that reskins the
+  **vanilla** Minecraft boat per wood-variant to render distinct 3D vehicles on Bedrock with
+  zero Java changes.
 
 ---
 
@@ -124,6 +125,15 @@ mvn -q clean test    # builds core-api -> core -> jobs and runs the JUnit tests
 4. `highlights/nemeles-npcai/.../ConversationManager.java` — the LLM prompt-assembly pattern.
 
 > Code comments and identifiers are in Spanish (my working language); this README is in English.
+
+---
+
+## 🎨 Assets & attribution
+
+This repo showcases **engineering, not art.** The Minecraft 3D weapon models/textures used by
+the live server are **third-party game assets** (not mine) and are **not included in this
+repository** — my work is the rendering/integration **code**, the cross-engine plumbing, and the
+entire backend. Vehicle tooling reskins **vanilla** Minecraft assets.
 
 ---
 
