@@ -119,6 +119,14 @@ voice calls via OpenAudioMc. It's kept **private** as a commercial product and w
 
 ---
 
+## 📱 Also built (private): NemelesPhone
+
+A full in-game **smartphone plugin** for the server — apps, contacts, UI, crossplay. Kept
+**private** as a product: a **commercial release for server owners is planned**. Mentioned here
+for context — its code is not part of this showcase.
+
+---
+
 ## ▶️ Build & test
 
 **Prerequisites:** JDK 21, Maven 3.9+.
