@@ -102,15 +102,26 @@ flowchart TD
   Project-Zomboid-style medical model (bleeding, fractures, infections, healing minigames).
 - **`npcai`** — NPCs driven by a local LLM (Ollama) with persistent memory, per-player affinity,
   world-context prompts, a CJK language-drift guard, and a real-time cloned-voice loop.
+- **Crossplay asset conversion** — adapting third-party weapon assets (**AG2 / guns++**, *credited*)
+  to a Java-compatible format and **Java ⇄ Bedrock parity**, incl. a **from-scratch software 3D
+  rasterizer** (pure Pillow) that renders Bedrock geometries to 2D inventory icons.
 - **Crossplay packaging tooling** (PowerShell/Python) — including a script that reskins the
   **vanilla** Minecraft boat per wood-variant to render distinct 3D vehicles on Bedrock with
   zero Java changes.
 
 ---
 
+## 📱 NemelesPhone — proprietary product (not in this repo)
+
+A full in-game **smartphone plugin** I built — multiple apps, Java ⇄ Bedrock crossplay UIs, and
+voice calls via OpenAudioMc. It's kept **private** as a commercial product and will be
+**available for licensing to Minecraft servers**. Demo or licensing inquiries: **emuiser1@gmail.com**.
+
+---
+
 ## ▶️ Build & test
 
-**Prerequisites:** JDK 17, Maven 3.9+.
+**Prerequisites:** JDK 21, Maven 3.9+.
 
 ```bash
 git clone https://github.com/NemelesUrek/nemeles-rp-showcase.git
@@ -128,12 +139,14 @@ mvn -q clean test    # builds core-api -> core -> jobs and runs the JUnit tests
 
 ---
 
-## 🎨 Assets & attribution
+## 🙏 Credits & attribution
 
-This repo showcases **engineering, not art.** The Minecraft 3D weapon models/textures used by
-the live server are **third-party game assets** (not mine) and are **not included in this
-repository** — my work is the rendering/integration **code**, the cross-engine plumbing, and the
-entire backend. Vehicle tooling reskins **vanilla** Minecraft assets.
+The 3D **weapon** models/textures used by the live server are from **Actual Guns 2 (AG2)** and
+**guns++**, by their respective creators — full credit to them. **My contribution is the
+engineering:** converting those assets to a **Java-compatible** format and achieving **true
+Java ⇄ Bedrock crossplay parity** for them (the rendering code in `highlights/nemeles-combat/` and
+the tooling in `highlights/resourcepack-scripts/`). The **asset files themselves are not
+redistributed** in this repository. Vehicle tooling reskins **vanilla** Minecraft assets.
 
 ---
 
